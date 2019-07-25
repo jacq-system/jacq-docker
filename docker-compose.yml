@@ -1,0 +1,37 @@
+version: '3.7'
+
+services:
+  db:
+    image: mariadb:10
+    container_name: jacq-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: jacq
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - 3306:3306
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
+      - db:/var/lib/mysql
+
+  wildfly:
+    build:
+      args:
+        WILDFLY_USER: ${WILDFLY_USER}
+        WILDFLY_PASSWORD: ${WILDFLY_PASSWORD}
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    container_name: jacq-wildfly
+    ports:
+      - 8080:8080
+      - 9990:9990
+    restart: always
+    volumes:
+      - ./deployments:/opt/jboss/wildfly/standalone/deployments
+
+volumes:
+  db: {}

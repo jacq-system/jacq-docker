@@ -1,3 +1,5 @@
+# JACQ Docker
+
 ## Configuration
 
 ### Database (MariaDB)
@@ -7,8 +9,7 @@ Filenames resemble the database used for execution but can be prefixed with a nu
 
 ### Application Server (Wildfly)
 
-The application server uses MySQL Connector Java 8.0.17 and therefore XADataSource class name `com.mysql.cj.jdbc.MysqlXADataSource`.
-
+The application server is configured using files from the source directory.
 Admin interface credentials are set from `.env`.
 
 ## Usage

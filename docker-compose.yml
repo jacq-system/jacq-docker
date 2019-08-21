@@ -33,8 +33,6 @@ services:
       - 9990:9990
       - 9991:9991
     restart: always
-    volumes:
-      - ./deployments:/opt/jboss/wildfly/standalone/deployments
 
 volumes:
   db: {}

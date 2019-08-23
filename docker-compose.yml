@@ -4,7 +4,6 @@ services:
   db:
     image: mariadb:10
     container_name: jacq-db
-    restart: always
     environment:
       MYSQL_DATABASE: ${DB}
       MYSQL_USER: ${DB_USER}
@@ -13,6 +12,7 @@ services:
     network_mode: host
     ports:
       - 3306:3306
+    restart: always
     volumes:
       - ./initdb:/docker-entrypoint-initdb.d
       - db:/var/lib/mysql
@@ -32,6 +32,14 @@ services:
       - 8080:8080
       - 9990:9990
       - 9991:9991
+    restart: always
+
+  gnparser:
+    image: gnames/biodiversity
+    container_name: jacq-biodiversity
+    network_mode: host
+    ports:
+      - 4334:4334
     restart: always
 
 volumes:

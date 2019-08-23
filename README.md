@@ -12,6 +12,10 @@ Filenames resemble the database used for execution but can be prefixed with a nu
 The application server is configured using files from the source directory.
 Admin interface credentials are set from `.env`.
 
+### Name Parser
+
+A scientific name parser is used to parse name strings into their components.
+
 ## Usage
 
 Run `docker-compose up` to start application server and database.

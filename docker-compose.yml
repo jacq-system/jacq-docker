@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3'
 
 services:
   db:
@@ -10,8 +10,8 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     network_mode: host
-    ports:
-      - 3306:3306
+    expose:
+      - 3306
     restart: always
     volumes:
       - ./initdb:/docker-entrypoint-initdb.d
@@ -38,8 +38,8 @@ services:
     image: gnames/biodiversity
     container_name: jacq-biodiversity
     network_mode: host
-    ports:
-      - 4334:4334
+    expose:
+      - 4334
     restart: always
 
 volumes:

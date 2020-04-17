@@ -44,8 +44,6 @@ services:
       - frontend
     expose:
       - 4334
-    ports:
-      - 4334:4334
     restart: always
 
 networks:

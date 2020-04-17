@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   db:
@@ -9,9 +9,10 @@ services:
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-    network_mode: host
     expose:
       - 3306
+    networks:
+      - backend
     restart: always
     volumes:
       - ./initdb:/docker-entrypoint-initdb.d
@@ -27,7 +28,9 @@ services:
     container_name: jacq-wildfly
     depends_on:
       - db
-    network_mode: host
+    networks:
+      - backend
+      - frontend
     ports:
       - 8080:8080
       - 9990:9990
@@ -37,10 +40,17 @@ services:
   gnparser:
     image: gnames/biodiversity
     container_name: jacq-biodiversity
-    network_mode: host
+    networks:
+      - frontend
     expose:
       - 4334
+    ports:
+      - 4334:4334
     restart: always
+
+networks:
+  frontend:
+  backend:
 
 volumes:
   db: {}

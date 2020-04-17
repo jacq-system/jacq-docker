@@ -1,7 +1,7 @@
 FROM jboss/wildfly:10.1.0.Final
 
 MAINTAINER Markus Reichl <markus@re1.dev>
-
+# Default username and password (override from .env file!)
 ARG WILDFLY_USER=wildfly
 ARG WILDFLY_PASSWORD=wildfly
 

@@ -140,7 +140,7 @@
         <subsystem xmlns="urn:jboss:domain:datasources:4.0">
             <datasources>
                 <datasource jndi-name="java:/openupDS" pool-name="OpenupDS" enabled="true" use-java-context="true">
-                    <connection-url>jdbc:mysql://127.0.0.1:3306/openup?zeroDateTimeBehavior=convertToNull</connection-url>
+                    <connection-url>jdbc:mysql://db:3306/openup?zeroDateTimeBehavior=convertToNull</connection-url>
                     <driver>mysql</driver>
                     <security>
                         <user-name>jacq</user-name>
@@ -148,7 +148,7 @@
                     </security>
                 </datasource>
                 <datasource jndi-name="java:/jacqDS" pool-name="JacqDS" enabled="true" use-java-context="true">
-                    <connection-url>jdbc:mysql://127.0.0.1:3306/jacq_input?zeroDateTimeBehavior=convertToNull</connection-url>
+                    <connection-url>jdbc:mysql://db:3306/jacq_input?zeroDateTimeBehavior=convertToNull</connection-url>
                     <driver>mysql</driver>
                     <security>
                         <user-name>jacq</user-name>

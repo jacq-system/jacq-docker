@@ -12,6 +12,9 @@ Filenames resemble the database used for execution but can be prefixed with a nu
 The application server is configured using files from the source directory.
 Admin interface credentials are set from `.env`.
 
+Service URLs are configured by setting the `JAVA_OPTS` variable from `standalone.conf`.
+The database URL is configured from `standalone.xml` using the Docker hostname `db` instead of the database container's IP.
+
 ### Name Parser
 
 A scientific name parser is used to parse name strings into their components.
@@ -21,3 +24,7 @@ A scientific name parser is used to parse name strings into their components.
 Run `docker-compose up` to start application server and database.
 
 Use localhost:8080 to reach the application server, localhost:9990 for its admin interface and localhost:3306 for the database.
+
+## Deployment
+
+For production the port of the application server can be changed from `docker-compose.yml` as shown in the Docker [Ports](https://docs.docker.com/compose/compose-file/#ports) documentation.

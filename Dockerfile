@@ -15,6 +15,6 @@ ADD mysql-connector-java-5.1.34-bin.jar $JBOSS_HOME/modules/system/layers/base/c
 ADD standalone.xml $JBOSS_HOME/standalone/configuration/standalone.xml
 ADD standalone.conf $JBOSS_HOME/bin/standalone.conf
 # Expose http and admin interface ports
-EXPOSE 8080 9990 9991
+EXPOSE 8080 8443 9990 9991
 # Set default command to boot WildFly in standalone mode and bind to all interfaces
 CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]

@@ -18,6 +18,17 @@ services:
       - ./initdb:/docker-entrypoint-initdb.d
       - db:/var/lib/mysql
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: jacq-phpmyadmin
+    links:
+      - db:mysql_db_server
+    networks:
+      - backend
+    restart: always
+    ports:
+      - 8081:80
+
   wildfly:
     build:
       args:

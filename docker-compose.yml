@@ -21,6 +21,10 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: jacq-phpmyadmin
+    environment:
+      PMA_ABSOLUTE_URI: https://${DEFAULT_HOST}/phpmyadmin/
+    expose:
+      - 80
     links:
       - db:mysql_db_server
     networks:
@@ -38,8 +42,9 @@ services:
     depends_on:
       - db
     environment:
-      - VIRTUAL_HOST: ${DEFAULT_HOST}
-      - LETSENCRYPT_HOST: ${DEFAULT_HOST}
+      VIRTUAL_HOST: ${DEFAULT_HOST}
+      VIRTUAL_PORT: 8080
+      LETSENCRYPT_HOST: ${DEFAULT_HOST}
     networks:
       - backend
       - frontend
@@ -61,7 +66,7 @@ services:
     image: jwilder/nginx-proxy
     container_name: jacq-nginx-proxy
     environment:
-      - DEFAULT_HOST: ${DEFAULT_HOST}
+      DEFAULT_HOST: ${DEFAULT_HOST}
     networks:
       - frontend
     ports:
@@ -74,11 +79,14 @@ services:
       - nginx-certs:/etc/nginx/certs:ro
       - /var/run/docker.sock:/tmp/docker.sock:ro
 
-  letsencrypt:
+  letsencrypt-nginx-proxy-companion:
     image: jrcs/letsencrypt-nginx-proxy-companion
     container_name: jacq-letsencrypt-nginx-proxy-companion
     depends_on:
       - nginx-proxy
+    environment:
+      DEFAULT_EMAIL: ${LETSENCRYPT_EMAIL}
+      NGINX_PROXY_CONTAINER: jacq-nginx-proxy
     networks:
       - frontend
     volumes:

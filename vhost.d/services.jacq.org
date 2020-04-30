@@ -1,3 +1,9 @@
-location /phpmyadmin {
-  proxy_pass http://phpmyadmin:80;
+location ~ ^/phpmyadmin {
+  rewrite ^/phpmyadmin(/.*)$ $1 break;
+  proxy_pass http://phpmyadmin;
+}
+
+location /openrefine {
+  rewrite ^/openrefine(/.*)$ $1 break;
+  proxy_pass http://94.130.56.28:3333;
 }

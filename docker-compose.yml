@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 
 services:
   db:
@@ -26,8 +26,6 @@ services:
     networks:
       - backend
     restart: always
-    ports:
-      - 8081:80
 
   wildfly:
     build:
@@ -39,12 +37,13 @@ services:
     container_name: jacq-wildfly
     depends_on:
       - db
+    environment:
+      - VIRTUAL_HOST: ${DEFAULT_HOST}
+      - LETSENCRYPT_HOST: ${DEFAULT_HOST}
     networks:
       - backend
       - frontend
     ports:
-      - 8080:8080
-      - 8443:8443
       - 9990:9990
       - 9991:9991
     restart: always
@@ -52,15 +51,47 @@ services:
   gnparser:
     image: gnames/biodiversity
     container_name: jacq-biodiversity
-    networks:
-      - frontend
     expose:
       - 4334
+    networks:
+      - frontend
     restart: always
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: jacq-nginx-proxy
+    environment:
+      - DEFAULT_HOST: ${DEFAULT_HOST}
+    networks:
+      - frontend
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d
+      - ./vhost.d:/etc/nginx/vhost.d
+      - nginx-html:/usr/share/nginx/html
+      - nginx-certs:/etc/nginx/certs:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: jacq-letsencrypt-nginx-proxy-companion
+    depends_on:
+      - nginx-proxy
+    networks:
+      - frontend
+    volumes:
+      - ./vhost.d:/etc/nginx/vhost.d
+      - nginx-html:/usr/share/nginx/html
+      - nginx-certs:/etc/nginx/certs:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:
   frontend:
   backend:
 
 volumes:
-  db: {}
+  db:
+  nginx-html:
+  nginx-certs:

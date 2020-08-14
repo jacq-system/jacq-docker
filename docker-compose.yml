@@ -80,6 +80,7 @@ services:
       - nginx-html:/usr/share/nginx/html
       - nginx-certs:/etc/nginx/certs:ro
       - /var/run/docker.sock:/tmp/docker.sock:ro
+    restart: always
 
   letsencrypt-nginx-proxy-companion:
     image: jrcs/letsencrypt-nginx-proxy-companion
@@ -96,6 +97,7 @@ services:
       - nginx-html:/usr/share/nginx/html
       - nginx-certs:/etc/nginx/certs:rw
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: always
 
 networks:
   frontend:

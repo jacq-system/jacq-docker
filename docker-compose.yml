@@ -25,8 +25,6 @@ services:
       PMA_ABSOLUTE_URI: https://${DEFAULT_HOST}/phpmyadmin/
     expose:
       - 80
-    ports:
-      - 8081:80
     links:
       - db:mysql_db_server
     restart: always
@@ -44,6 +42,13 @@ services:
     environment:
       VIRTUAL_HOST: ${DEFAULT_HOST}
       VIRTUAL_PORT: 8080
+<<<<<<< HEAD
+=======
+      LETSENCRYPT_HOST: ${DEFAULT_HOST}
+    networks:
+      - backend
+      - frontend
+>>>>>>> 42826194606d4a7a3fef548a9ea58ce001a728f4
     ports:
       - 9990:9990
       - 9991:9991
@@ -54,6 +59,43 @@ services:
     container_name: jacq-biodiversity
     expose:
       - 4334
+    networks:
+      - frontend
+    restart: always
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: jacq-nginx-proxy
+    environment:
+      DEFAULT_HOST: ${DEFAULT_HOST}
+    networks:
+      - frontend
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d
+      - ./vhost.d:/etc/nginx/vhost.d
+      - nginx-html:/usr/share/nginx/html
+      - nginx-certs:/etc/nginx/certs:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    restart: always
+
+  letsencrypt-nginx-proxy-companion:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: jacq-letsencrypt-nginx-proxy-companion
+    depends_on:
+      - nginx-proxy
+    environment:
+      DEFAULT_EMAIL: ${LETSENCRYPT_EMAIL}
+      NGINX_PROXY_CONTAINER: jacq-nginx-proxy
+    networks:
+      - frontend
+    volumes:
+      - ./vhost.d:/etc/nginx/vhost.d
+      - nginx-html:/usr/share/nginx/html
+      - nginx-certs:/etc/nginx/certs:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     restart: always
 
   nginx-proxy:

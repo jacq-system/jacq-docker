@@ -139,7 +139,7 @@
         <subsystem xmlns="urn:jboss:domain:datasources:4.0">
             <datasources>
                 <datasource jndi-name="java:/openupDS" pool-name="OpenupDS" enabled="true" use-java-context="true">
-                    <connection-url>jdbc:mysql://db:3306/openup?zeroDateTimeBehavior=convertToNull?autoReconnect=true?useUnicode=true&characterEncoding=UTF-8</connection-url>
+                    <connection-url>jdbc:mysql://db:3306/openup?zeroDateTimeBehavior=convertToNull?autoReconnect=true?useUnicode=true?characterEncoding=UTF-8</connection-url>
                     <driver>mysql</driver>
                     <security>
                         <user-name>jacq</user-name>

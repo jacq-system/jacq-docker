@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   db:
@@ -11,8 +11,6 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     expose:
       - 3306
-    networks:
-      - backend
     ports:
       - 3306:3306
     restart: always
@@ -23,13 +21,15 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: jacq-phpmyadmin
-    links:
-      - db:mysql_db_server
-    networks:
-      - backend
-    restart: always
+    environment:
+      PMA_ABSOLUTE_URI: http://${DEFAULT_HOST}/phpmyadmin/
+    expose:
+      - 80
     ports:
       - 8081:80
+    links:
+      - db:mysql_db_server
+    restart: always
 
   wildfly:
     build:
@@ -41,12 +41,10 @@ services:
     container_name: jacq-wildfly
     depends_on:
       - db
-    networks:
-      - backend
-      - frontend
+    environment:
+      VIRTUAL_HOST: ${DEFAULT_HOST}
+      VIRTUAL_PORT: 8080
     ports:
-      - 8080:8080
-      - 8443:8443
       - 9990:9990
       - 9991:9991
     restart: always
@@ -54,15 +52,24 @@ services:
   gnparser:
     image: gnames/biodiversity
     container_name: jacq-biodiversity
-    networks:
-      - frontend
     expose:
       - 4334
     restart: always
 
-networks:
-  frontend:
-  backend:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: jacq-nginx-proxy
+    depends_on:
+      - phpmyadmin
+      - wildfly
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - ./nginx/vhost.d:/etc/nginx/vhost.d
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    restart: always
 
 volumes:
   db: {}

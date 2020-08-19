@@ -22,7 +22,7 @@ services:
     image: phpmyadmin/phpmyadmin
     container_name: jacq-phpmyadmin
     environment:
-      PMA_ABSOLUTE_URI: http://${DEFAULT_HOST}/phpmyadmin/
+      PMA_ABSOLUTE_URI: https://${DEFAULT_HOST}/phpmyadmin/
     expose:
       - 80
     ports:
@@ -68,8 +68,26 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
       - ./nginx/vhost.d:/etc/nginx/vhost.d
+      - nginx-html:/usr/share/nginx/html
+      - nginx-certs:/etc/nginx/certs:ro
       - /var/run/docker.sock:/tmp/docker.sock:ro
     restart: always
 
+  letsencrypt-nginx-proxy-companion:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: jacq-letsencrypt-nginx-proxy-companion
+    depends_on:
+      - nginx-proxy
+    environment:
+      DEFAULT_EMAIL: ${LETSENCRYPT_EMAIL}
+      NGINX_PROXY_CONTAINER: jacq-nginx-proxy
+    volumes:
+      - ./nginx/vhost.d:/etc/nginx/vhost.d
+      - nginx-html:/usr/share/nginx/html
+      - nginx-certs:/etc/nginx/certs:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
 volumes:
-  db: {}
+  db:
+  nginx-html:
+  nginx-certs:

@@ -1,4 +1,0 @@
-location ~ ^/phpmyadmin {
-  rewrite ^/phpmyadmin(/.*)$ $1 break;
-  proxy_pass http://phpmyadmin;
-}

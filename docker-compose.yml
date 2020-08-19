@@ -72,4 +72,4 @@ services:
     restart: always
 
 volumes:
-  db: {}
+  db:

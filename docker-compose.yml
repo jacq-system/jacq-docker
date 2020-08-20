@@ -11,6 +11,8 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     expose:
       - 3306
+    networks:
+      - backend
     ports:
       - 3306:3306
     restart: always
@@ -25,6 +27,9 @@ services:
       PMA_ABSOLUTE_URI: https://${DEFAULT_HOST}/phpmyadmin/
     expose:
       - 80
+    networks:
+      - backend
+      - frontend
     ports:
       - 8081:80
     links:
@@ -45,6 +50,9 @@ services:
       VIRTUAL_HOST: ${DEFAULT_HOST}
       VIRTUAL_PORT: 8080
       LETSENCRYPT_HOST: ${DEFAULT_HOST}
+    networks:
+      - backend
+      - frontend
     ports:
       - 9990:9990
       - 9991:9991
@@ -55,6 +63,8 @@ services:
     container_name: jacq-biodiversity
     expose:
       - 4334
+    networks:
+      - frontend
     restart: always
 
   nginx-proxy:
@@ -63,6 +73,8 @@ services:
     depends_on:
       - phpmyadmin
       - wildfly
+    networks:
+      - frontend
     ports:
       - 80:80
       - 443:443
@@ -82,11 +94,17 @@ services:
     environment:
       DEFAULT_EMAIL: ${LETSENCRYPT_EMAIL}
       NGINX_PROXY_CONTAINER: jacq-nginx-proxy
+    networks:
+      - frontend
     volumes:
       - ./nginx/vhost.d:/etc/nginx/vhost.d
       - nginx-html:/usr/share/nginx/html
       - nginx-certs:/etc/nginx/certs:rw
       - /var/run/docker.sock:/var/run/docker.sock:ro
+
+networks:
+  backend:
+  frontend:
 
 volumes:
   db:

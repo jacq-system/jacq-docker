@@ -140,7 +140,7 @@
             <datasources>
                 <datasource jndi-name="java:/openupDS" pool-name="OpenupDS" enabled="true" use-java-context="true">
                     <connection-url>jdbc:mysql://db:3306/openup?zeroDateTimeBehavior=convertToNull</connection-url>
-                    <driver>mysql</driver>
+                    <driver>mysql-connector-java-8.0.21.jar</driver>
                     <security>
                         <user-name>jacq</user-name>
                         <password>jacq</password>
@@ -148,7 +148,7 @@
                 </datasource>
                 <datasource jndi-name="java:/jacqDS" pool-name="JacqDS" enabled="true" use-java-context="true">
                     <connection-url>jdbc:mysql://db:3306/jacq_input?zeroDateTimeBehavior=convertToNull</connection-url>
-                    <driver>mysql</driver>
+                    <driver>mysql-connector-java-8.0.21.jar</driver>
                     <security>
                         <user-name>jacq</user-name>
                         <password>jacq</password>
@@ -165,9 +165,6 @@
                 <drivers>
                     <driver name="h2" module="com.h2database.h2">
                         <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
-                    </driver>
-                    <driver name="mysql" module="com.mysql">
-                        <xa-datasource-class>com.mysql.jdbc.Driver</xa-datasource-class>
                     </driver>
                 </drivers>
             </datasources>
@@ -271,11 +268,11 @@
             <cache-container name="hibernate" default-cache="local-query" module="org.hibernate.infinispan">
                 <local-cache name="entity">
                     <transaction mode="NON_XA"/>
-                    <eviction strategy="LRU" max-entries="10000"/>
+                    <eviction max-entries="10000"/>
                     <expiration max-idle="100000"/>
                 </local-cache>
                 <local-cache name="local-query">
-                    <eviction strategy="LRU" max-entries="10000"/>
+                    <eviction max-entries="10000"/>
                     <expiration max-idle="100000"/>
                 </local-cache>
                 <local-cache name="timestamps"/>

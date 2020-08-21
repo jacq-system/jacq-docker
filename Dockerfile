@@ -1,4 +1,4 @@
-FROM jboss/wildfly:10.1.0.Final
+FROM jboss/wildfly:20.0.1.Final
 
 MAINTAINER Markus Reichl <markus@re1.dev>
 # Default username and password (override from .env file!)
@@ -8,9 +8,8 @@ ARG WILDFLY_PASSWORD=wildfly
 ENV JBOSS_CLI $JBOSS_HOME/bin/jboss-cli.sh
 # Add Wildfly user for admin interface
 RUN /opt/jboss/wildfly/bin/add-user.sh -u ${WILDFLY_USER} -p ${WILDFLY_PASSWORD} --silent
-# Add mysql module
-ADD module.xml $JBOSS_HOME/modules/system/layers/base/com/mysql/main/module.xml
-ADD mysql-connector-java-5.1.34-bin.jar $JBOSS_HOME/modules/system/layers/base/com/mysql/main/mysql-connector-java-5.1.34-bin.jar
+# Add mysql JDBC driver
+ADD mysql-connector-java-8.0.21.jar $JBOSS_HOME/standalone/deployments/mysql-connector-java-8.0.21.jar
 # Add custom standalone deployment configurations
 ADD standalone.xml $JBOSS_HOME/standalone/configuration/standalone.xml
 ADD standalone.conf $JBOSS_HOME/bin/standalone.conf

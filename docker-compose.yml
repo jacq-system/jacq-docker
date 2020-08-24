@@ -61,6 +61,8 @@ services:
       - 9990:9990
       - 9991:9991
     restart: always
+    volumes:
+      - wildfly:/opt/jboss/wildfly
 
   gnparser:
     image: gnames/biodiversity
@@ -94,3 +96,4 @@ networks:
 
 volumes:
   db:
+  wildfly:
